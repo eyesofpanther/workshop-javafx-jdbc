@@ -1,0 +1,13 @@
+{
+    
+    "configurations": [
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "com.alcateia/com.alcateia.App",
+            "projectName": "workshop-javafx-jdbc",
+            "vmArgs": "--enable-native-access=javafx.graphics,com.alcateia"
+        }
+    ]
+}
