@@ -4,5 +4,6 @@ module com.alcateia {
     requires transitive javafx.graphics;
 
     opens com.alcateia to javafx.fxml;
+    
     exports com.alcateia;
 }
