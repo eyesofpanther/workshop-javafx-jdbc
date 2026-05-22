@@ -1,17 +1,28 @@
 package com.alcateia.gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.MenuItem;
+import com.alcateia.Main;
+import com.alcateia.gui.util.Alerts;
+import com.alcateia.App;
 
-public class MainViewController implements Initializable{
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
+
+public class MainViewController implements Initializable {
 
     @FXML
     private MenuItem menuItemSeller;
-    
+
     @FXML
     private MenuItem menuItemDepartment;
 
@@ -19,23 +30,49 @@ public class MainViewController implements Initializable{
     private MenuItem menuItemAbout;
 
     @FXML
-    public void onMenuItemSellerAction(){
+    public void onMenuItemSellerAction() {
         System.out.println("OnMenuItemSellerAction");
     }
 
     @FXML
-    public void onMenuItemDepartmentAction(){
+    public void onMenuItemDepartmentAction() {
         System.out.println("OnMenuItemSellerAction");
     }
 
-        @FXML
+    @FXML
     public void onMenuItemAboutAction(){
-        System.out.println("OnMenuItemSellerAction");
+        loadView("/com/alcateia/gui/About.fxml");
     }
 
     @Override
     public void initialize(URL uri, ResourceBundle rb) {
 
     }
+
+private void loadView(String absoluteName) { 
+    try { 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName)); 
+        VBox newVBox = loader.load(); 
+        
+        // Buscamos a Scene garantindo que o compilador entenda que é do JavaFX
+        javafx.scene.Scene mainScene = com.alcateia.App.getMainScene(); 
+        
+        // Pegamos a raiz (Root) e fazemos o cast para ScrollPane
+        ScrollPane scrollPane = (ScrollPane) mainScene.getRoot();
+        
+        // Pegamos o conteúdo de dentro do ScrollPane
+        VBox mainVBox = (VBox) scrollPane.getContent(); 
+        
+        // Mantemos o menu e trocamos o conteúdo de baixo
+        Node mainMenu = mainVBox.getChildren().get(0); 
+        mainVBox.getChildren().clear(); 
+        mainVBox.getChildren().add(mainMenu); 
+        mainVBox.getChildren().addAll(newVBox.getChildren()); 
+    } 
+    catch (IOException e) { 
+        Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR); 
+    } 
+}
+
 
 }
