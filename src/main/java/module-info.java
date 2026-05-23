@@ -5,6 +5,7 @@ module com.alcateia {
 
     opens com.alcateia to javafx.fxml;
     opens com.alcateia.gui to javafx.fxml;
+    opens com.alcateia.model.entities to javafx.base, javafx.fxml;
     
     exports com.alcateia;
 }

@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.alcateia.gui.util.Alerts;
+import com.alcateia.model.services.DepartmentService;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -32,7 +34,7 @@ public class MainViewController implements Initializable {
 
     @FXML
     public void onMenuItemDepartmentAction() {
-        loadView("/com/alcateia/gui/DepartmentList.fxml");
+        loadView2("/com/alcateia/gui/DepartmentList.fxml");
     }
 
     @FXML
@@ -64,6 +66,35 @@ private void loadView(String absoluteName) {
         mainVBox.getChildren().clear(); 
         mainVBox.getChildren().add(mainMenu); 
         mainVBox.getChildren().addAll(newVBox.getChildren()); 
+    } 
+    catch (IOException e) { 
+        Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR); 
+    } 
+}
+ 
+private void loadView2(String absoluteName) { 
+    try { 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName)); 
+        VBox newVBox = loader.load(); 
+        
+        // Buscamos a Scene garantindo que o compilador entenda que é do JavaFX
+        javafx.scene.Scene mainScene = com.alcateia.App.getMainScene(); 
+        
+        // Pegamos a raiz (Root) e fazemos o cast para ScrollPane
+        ScrollPane scrollPane = (ScrollPane) mainScene.getRoot();
+        
+        // Pegamos o conteúdo de dentro do ScrollPane
+        VBox mainVBox = (VBox) scrollPane.getContent(); 
+        
+        // Mantemos o menu e trocamos o conteúdo de baixo
+        Node mainMenu = mainVBox.getChildren().get(0); 
+        mainVBox.getChildren().clear(); 
+        mainVBox.getChildren().add(mainMenu); 
+        mainVBox.getChildren().addAll(newVBox.getChildren()); 
+
+        DepartmentListController controller = loader.getController();
+        controller.setDepartmentService(new DepartmentService());
+        controller.updateTableView();
     } 
     catch (IOException e) { 
         Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR); 
