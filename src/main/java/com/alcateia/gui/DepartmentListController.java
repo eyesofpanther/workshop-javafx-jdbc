@@ -27,7 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class DepartmentListController implements Initializable{
+public class DepartmentListController implements Initializable {
 
     private DepartmentService service;
 
@@ -45,22 +45,20 @@ public class DepartmentListController implements Initializable{
 
     private ObservableList<Department> obsList;
 
-    /*
     @FXML
-    private void onBtNewAction(ActionEvent event){
+    private void onBtNewAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         createDialogForm("/com/alcateia/gui/DepartmentForm.fxml", parentStage);
 
     }
- */
 
     @FXML
-    public void onMenuItemAboutAction(ActionEvent event){
+    public void onMenuItemAboutAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         createDialogForm("/com/alcateia/gui/DepartmentForm.fxml", parentStage);
     }
 
-    public void setDepartmentService(DepartmentService service){
+    public void setDepartmentService(DepartmentService service) {
         this.service = service;
     }
 
@@ -70,7 +68,6 @@ public class DepartmentListController implements Initializable{
 
     }
 
-
     private void initializeNodes() {
         tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -78,11 +75,10 @@ public class DepartmentListController implements Initializable{
         Stage stage = (Stage) App.getMainScene().getWindow();
         tableViewDepartment.prefHeightProperty().bind(stage.heightProperty());
 
-       
     }
 
-    public void updateTableView(){
-        if (service == null){
+    public void updateTableView() {
+        if (service == null) {
             throw new IllegalStateException("Service was null");
         }
         List<Department> list = service.findAll();
@@ -93,9 +89,9 @@ public class DepartmentListController implements Initializable{
 
     private void createDialogForm(String absoluteName, Stage parentStage) {
         try {
-             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
-            
+
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Enter Department data");
             dialogStage.setScene(new Scene(pane));
@@ -103,10 +99,11 @@ public class DepartmentListController implements Initializable{
             dialogStage.initOwner(parentStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.showAndWait();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
-            
+        } catch (RuntimeException e) {
+            // ISSO VAI MOSTRAR O ERRO REAL NO SEU CONSOLE
+            e.printStackTrace();
         }
     }
 
