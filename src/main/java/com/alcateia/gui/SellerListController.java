@@ -13,6 +13,7 @@ import com.alcateia.gui.util.Alerts;
 import com.alcateia.gui.util.Utils;
 import com.alcateia.model.db.DBIntegrityException;
 import com.alcateia.model.entities.Seller;
+import com.alcateia.model.services.DepartmentService;
 import com.alcateia.model.services.SellerService;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -126,7 +127,8 @@ public class SellerListController implements Initializable, DataChangeListener {
 
             SellerFormController controller = loader.getController();
             controller.setSeller(obj);
-            controller.setSellerService(new SellerService());
+            controller.setServices(new SellerService(), new DepartmentService());
+            controller.loadAssociatedObjects();
             controller.subscribebDataChangeListener(this);
             controller.updateFormData();
 
@@ -138,6 +140,7 @@ public class SellerListController implements Initializable, DataChangeListener {
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.showAndWait();
         } catch (IOException e) {
+             e.printStackTrace();
             Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
         } catch (RuntimeException e) {
             // ISSO VAI MOSTRAR O ERRO REAL NO SEU CONSOLE
