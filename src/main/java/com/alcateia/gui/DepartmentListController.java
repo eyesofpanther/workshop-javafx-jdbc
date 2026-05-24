@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.alcateia.App;
+import com.alcateia.gui.listeners.DataChangeListener;
 import com.alcateia.gui.util.Alerts;
 import com.alcateia.gui.util.Utils;
 import com.alcateia.model.entities.Department;
@@ -27,7 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable, DataChangeListener {
 
     private DepartmentService service;
 
@@ -97,8 +98,8 @@ public class DepartmentListController implements Initializable {
             DepartmentFormController controller = loader.getController();
             controller.setDepartment(obj);
             controller.setDepartmentService(new DepartmentService());
+            controller.subscribebDataChangeListener(this);
             controller.updateFormData();
-
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Enter Department data");
@@ -113,6 +114,11 @@ public class DepartmentListController implements Initializable {
             // ISSO VAI MOSTRAR O ERRO REAL NO SEU CONSOLE
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onDataChanged() {
+        updateTableView();
     }
 
 }
